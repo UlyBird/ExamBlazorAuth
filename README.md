@@ -1,5 +1,8 @@
 # ExamBlazorAuth
+# ServerApp
+nuget 설치
 
+# WebAssembly
 ## server 
 nuget 설치 (5.0.13으로 통일)
 Microsoft.AspNetCore.Authentication.JwtBearer
@@ -11,10 +14,12 @@ LoginController.cs
 코드 추가
 
 appsettings.json 환경설정
+``` json
   "JwtSecurityKey": "RANDOM_KEY_MUST_NOT_BE_SHARED",
   "JwtIssuer": "https://localhost",
   "JwtAudience": "https://localhost",
   "JwtExpiryInDays": 1
+```
 
 ## shared
 LoginModel, LoginResult 추가
@@ -38,9 +43,11 @@ razor 추가
 Login, Logout
 
 _imports.razor
+``` csharp
 @using WebAssemblyApp.Client.Services
 @using WebAssemblyApp.Shared
 @using Microsoft.AspNetCore.Components.Authorization
+```
 
 App.razor
 <AuthorizeRouteView> 추가
