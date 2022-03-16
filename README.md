@@ -1,6 +1,8 @@
 # ExamBlazorAuth
 # ServerApp
 nuget ¼³Ä¡
+Microsoft.AspNetCore.Authentication.JwtBearer
+Microsoft.AspNetCore.Components.Authorization
 
 # WebAssembly
 ## server 
