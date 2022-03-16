@@ -1,15 +1,12 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using ServerApp.Data;
 using System.Net.Http;
-using System.Text;
 
 namespace ServerApp
 {
@@ -26,6 +23,11 @@ namespace ServerApp
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHttpContextAccessor();
+            services.AddScoped<HttpContextAccessor>();
+            services.AddHttpClient();
+            services.AddScoped<HttpClient>();
+
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
@@ -40,21 +42,23 @@ namespace ServerApp
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<EmployeeService>();
 
-            // Add Auth
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidateAudience = true,
-                            ValidateLifetime = true,
-                            ValidateIssuerSigningKey = true,
-                            ValidIssuer = Configuration["JwtIssuer"],
-                            ValidAudience = Configuration["JwtAudience"],
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
-                        };
-                    });
+
+
+            //// Add Auth
+            //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            //        .AddJwtBearer(options =>
+            //        {
+            //            options.TokenValidationParameters = new TokenValidationParameters
+            //            {
+            //                ValidateIssuer = true,
+            //                ValidateAudience = true,
+            //                ValidateLifetime = true,
+            //                ValidateIssuerSigningKey = true,
+            //                ValidIssuer = Configuration["JwtIssuer"],
+            //                ValidAudience = Configuration["JwtAudience"],
+            //                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+            //            };
+            //        });
 
         }
 
@@ -72,6 +76,9 @@ namespace ServerApp
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -82,6 +89,7 @@ namespace ServerApp
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
         }
     }
 }
