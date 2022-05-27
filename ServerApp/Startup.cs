@@ -42,7 +42,7 @@ namespace ServerApp
             services.AddSingleton<WeatherForecastService>();
             services.AddScoped<EmployeeService>();
 
-
+            //commit 테스트
 
             //// Add Auth
             //services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
